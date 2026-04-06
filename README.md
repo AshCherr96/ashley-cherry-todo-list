@@ -1,16 +1,35 @@
-# React + Vite
+Ashley's Todo List App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+-- Description --
 
-Currently, two official plugins are available:
+This is a simple React application built as part of the Code the Dream React course. The app currently demonstrates the basics of React components, JSX, and rendering lists using the .map() function.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Features:
+Vite + React: Fast development environment using the Vite React template.
 
-## React Compiler
+Dynamic List Rendering: Uses JavaScript arrays to render todo items efficiently.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Clean Architecture: Minimalistic setup with custom CSS cleared for future styling.
 
-## Expanding the ESLint configuration
+--- Installation Instructions ---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Prerequisites:
+Before running this project, ensure you have Node.js installed on your machine.
+
+1. Clone the repository to your local machine.
+
+2. Open your terminal and navigate to the project folder.
+
+Run the following command to install the necessary dependencies:
+
+npm install
+
+-- How to Run the App --
+
+To start the local development server and view the app in your browser, run:
+
+npm run dev
+
+Once the server is running, open your browser to http://localhost:5173.
+
+
