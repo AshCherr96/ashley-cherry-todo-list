@@ -3,7 +3,6 @@ import TextInputWithLabel from '../../shared/TextInputWithLabel';
 import { isValidTodoTitle } from '../../utils/todoValidation';
 
 function TodoListItem({ todo, onCompleteTodo, onUpdateTodo }) {
-  // Replace multiple useStates with custom hook
   const { 
     isEditing, 
     workingTitle, 
@@ -17,7 +16,6 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo }) {
     event.preventDefault();
     if (!isEditing) return;
 
-    // Use logic provided by the hook to get the final title
     const finalTitle = finishEdit();
     onUpdateTodo({ ...todo, title: finalTitle });
   };
@@ -41,9 +39,18 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo }) {
             </button>
           </>
         ) : (
-          <span onClick={startEditing} style={{ cursor: 'pointer' }}>
-            {todo.title}
-          </span>
+          <>
+            <label>
+              <input 
+                type="checkbox" 
+                checked={todo.isCompleted} 
+                onChange={() => onCompleteTodo(todo.id)} 
+              />
+            </label>
+            <span onClick={startEditing} style={{ cursor: 'pointer' }}>
+              {todo.title}
+            </span>
+          </>
         )}
       </form>
     </li>
