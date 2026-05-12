@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react'; // Import useState
+import { isValidTodoTitle } from '../utils/todoValidation';
 
 function TodoForm({ onAddTodo }) {
   // Create the state variable.
@@ -32,7 +33,7 @@ function TodoForm({ onAddTodo }) {
       />
       <button 
   type="submit" 
-  disabled={!workingTodoTitle.trim()} // grey out the button if empty
+  disabled={!isValidTodoTitle(workingTodoTitle)} // grey out the button if empty
 >
   Add Todo
 </button>
