@@ -18,10 +18,10 @@ function TodoForm({ onAddTodo }) {
 
   return (
     <form onSubmit={handleAddTodo}>
-      {/* Replace raw label/input with TextInputWithLabel */}
+      {/* Updated elementId to id, and labelText to label */}
       <TextInputWithLabel 
-        elementId="todoTitle" 
-        labelText="Todo"
+        id="todoTitle" 
+        label="Todo"
         inputRef={inputRef}
         value={workingTodoTitle}
         onChange={(event) => setWorkingTodoTitle(event.target.value)}

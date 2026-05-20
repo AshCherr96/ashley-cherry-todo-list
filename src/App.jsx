@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Header from './shared/Header';
 import TodosPage from './features/Todos/TodosPage';
-import Logon from './features/Logon'; // Make sure this is imported
+import Logon from './features/Logon';
 
 function App() {
   const [email, setEmail] = useState('');
@@ -9,8 +9,7 @@ function App() {
 
   return (
     <div>
-      {/* Header stays at the top, passing auth props down */}
-      <Header token={token} onSetToken={setToken} onSetEmail={setEmail} />
+      <Header />
       
       {/* CONDITIONAL RENDERING: Only show todos if we have a token */}
       {token ? (
