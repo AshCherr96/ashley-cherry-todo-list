@@ -1,9 +1,10 @@
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// https://vite.dev/config/
+// https://vite.dev/config/ for more info about configuration options
 export default ({ mode }) => {
   const env = loadEnv(mode, '.', '');
+
   return defineConfig({
     plugins: [react()],
     server: {
@@ -16,15 +17,21 @@ export default ({ mode }) => {
           configure: (proxy) => {
             proxy.on('proxyRes', (proxyRes) => {
               const cookies = proxyRes.headers['set-cookie'];
-              if (cookies) {
-                proxyRes.headers['set-cookie'] = cookies.map((cookie) =>
-                  cookie
-                    .replace(/; *Secure/gi, '')
-                    .replace(/; *SameSite=None/gi, '')
-                    .replace(/; *Domain=[^;]+/gi, '')
-                );
+
+              if (!cookies) {
+                return;
               }
-            });
+
+              // Check if cookies is an array; if it's a string, wrap it in an array
+              const cookieArray = Array.isArray(cookies) ? cookies : [cookies];
+              
+              proxyRes.headers['set-cookie'] = cookieArray.map((cookie) =>
+                cookie
+                  .replace(/; *Secure/gi, '')
+                  .replace(/; *SameSite=None/gi, '')
+                  .replace(/; *Domain=[^;]+/gi, '')
+              );
+            }); // Properly closed proxyRes listener
           },
         },
       },

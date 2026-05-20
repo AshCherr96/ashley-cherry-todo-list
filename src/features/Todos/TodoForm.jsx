@@ -22,7 +22,7 @@ function TodoForm({ onAddTodo }) {
       <TextInputWithLabel 
         elementId="todoTitle" 
         labelText="Todo"
-        ref={inputRef}
+        inputRef={inputRef}
         value={workingTodoTitle}
         onChange={(event) => setWorkingTodoTitle(event.target.value)}
       />

@@ -1,15 +1,19 @@
-function TextInputWithLabel({ elementId, labelText, onChange, ref, value }) {
+import React from 'react';
+
+function TextInputWithLabel({ id, label, value, onChange, inputRef, ...props }) {
   return (
-    <>
-      <label htmlFor={elementId}>{labelText}</label>
-      <input 
-        type="text" 
-        id={elementId} 
-        ref={ref} 
-        value={value} 
-        onChange={onChange} 
+    <div className="form-group">
+      <label htmlFor={id}>{label}</label>
+      <input
+        id={id}
+        type="text"
+        value={value}
+        onChange={onChange}
+        ref={inputRef} 
+        {...props}
       />
-    </>
+    </div>
   );
 }
+
 export default TextInputWithLabel;

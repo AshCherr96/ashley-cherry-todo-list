@@ -129,7 +129,11 @@ function TodosPage({ token }) {
           'X-CSRF-TOKEN': token,
         },
         credentials: 'include',
-        body: JSON.stringify({ title: editedTodo.title, isCompleted: editedTodo.isCompleted }),
+        body: JSON.stringify({ 
+          title: editedTodo.title, 
+          isCompleted: editedTodo.isCompleted,
+          createdAt: originalTodo.createdAt
+        }),
       });
 
       if (!response.ok) throw new Error('Could not modify task details.');
