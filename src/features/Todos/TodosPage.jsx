@@ -97,7 +97,10 @@ function TodosPage({ token }) {
           'X-CSRF-TOKEN': token,
         },
         credentials: 'include',
-        body: JSON.stringify({ isCompleted: true }),
+        body: JSON.stringify({ 
+          isCompleted: true,
+          createdAt: originalTodo.createdAt 
+        }),
       });
 
       if (!response.ok) throw new Error('Failed to update task status.');

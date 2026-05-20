@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function Logon({ onSetEmail, onSetToken }) {
+function Logon({ onSetEmail = () => {}, onSetToken = () => {} }) {
   // Controlled form inputs
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
