@@ -25,11 +25,12 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo }) {
       <form onSubmit={handleUpdate}>
         {isEditing ? (
           <>
+            {/* Updated props from elementId/labelText to id/label */}
             <TextInputWithLabel 
+              id={`edit-${todo.id}`}
+              label="Edit Todo"
               value={workingTitle} 
               onChange={(e) => updateTitle(e.target.value)} 
-              elementId={`edit-${todo.id}`}
-              labelText="Edit Todo"
             />
             <button type="submit" disabled={!isValidTodoTitle(workingTitle)}>
               Update

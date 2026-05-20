@@ -7,18 +7,18 @@ function App() {
   const [email, setEmail] = useState('');
   const [token, setToken] = useState('');
 
-  return (
-    <div>
-      <Header />
-      
-      {/* CONDITIONAL RENDERING: Only show todos if we have a token */}
-      {token ? (
-        <TodosPage token={token} />
-      ) : (
-        <Logon onSetEmail={setEmail} onSetToken={setToken} />
-      )}
-    </div>
-  );
+
+return (
+  <div>
+    <Header token={token} onSetEmail={setEmail} onSetToken={setToken} />
+    
+    {token ? (
+      <TodosPage token={token} />
+    ) : (
+      <Logon onSetEmail={setEmail} onSetToken={setToken} />
+    )}
+  </div>
+);
 }
 
 export default App;

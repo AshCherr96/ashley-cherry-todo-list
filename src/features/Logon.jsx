@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import TextInputWithLabel from '../shared/TextInputWithLabel'; 
 
-function Logon({ onSetEmail = () => {}, onSetToken = () => {} }) {
+// Removed the default '= () => {}' placeholders to match provided props exactly
+function Logon({ onSetEmail, onSetToken }) {
   // Controlled form inputs
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -65,7 +66,6 @@ function Logon({ onSetEmail = () => {}, onSetToken = () => {} }) {
       )}
 
       <form onSubmit={handleSubmit}>
-        {/* Replaced raw input with TextInputWithLabel using correct id and label props */}
         <TextInputWithLabel 
           id="loginEmail"
           label="Email Address:"
@@ -76,7 +76,6 @@ function Logon({ onSetEmail = () => {}, onSetToken = () => {} }) {
           disabled={isLoggingOn}
         />
 
-        {/* Replaced raw input with TextInputWithLabel using correct id and label props */}
         <TextInputWithLabel 
           id="loginPassword"
           label="Password:"
