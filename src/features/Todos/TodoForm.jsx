@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { isValidTodoTitle } from '../utils/todoValidation';
-import TextInputWithLabel from '../shared/TextInputWithLabel';
+import { isValidTodoTitle } from '../../utils/todoValidation';
+import TextInputWithLabel from '../../shared/TextInputWithLabel';
 
 function TodoForm({ onAddTodo }) {
   const [workingTodoTitle, setWorkingTodoTitle] = useState('');
@@ -18,11 +18,11 @@ function TodoForm({ onAddTodo }) {
 
   return (
     <form onSubmit={handleAddTodo}>
-      {/* Replace raw label/input with TextInputWithLabel */}
+      {/* Updated elementId to id, and labelText to label */}
       <TextInputWithLabel 
-        elementId="todoTitle" 
-        labelText="Todo"
-        ref={inputRef}
+        id="todoTitle" 
+        label="Todo"
+        inputRef={inputRef}
         value={workingTodoTitle}
         onChange={(event) => setWorkingTodoTitle(event.target.value)}
       />
