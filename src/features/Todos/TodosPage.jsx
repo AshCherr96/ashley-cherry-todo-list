@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react'; 
 import TodoForm from './TodoForm';
 import TodoList from './TodoList/TodoList';
-import SortBy from '../../shared/SortBy';
-import useDebounce from '../utils/useDebounce';
-import FilterInput from '../shared/FilterInput';
+import SortBy from '../../shared/SortBy'; 
+import useDebounce from '../../utils/useDebounce';  
+import FilterInput from '../../shared/FilterInput';  
 
 function TodosPage({ token }) {
   const [todoList, setTodoList] = useState([]);
@@ -15,8 +15,9 @@ function TodosPage({ token }) {
   const debouncedFilterTerm = useDebounce(filterTerm, 300);
   const [dataVersion, setDataVersion] = useState(0);
   const [filterError, setFilterError] = useState('');
+
+  // Cache Invalidation function using useCallback
   const invalidateCache = useCallback(() => {
-    console.log("Invalidating memo cache after todo mutation");
     setDataVersion(prev => prev + 1);
   }, []);
 
@@ -219,7 +220,6 @@ function TodosPage({ token }) {
 
       {isTodoListLoading && <p style={{ fontStyle: 'italic', color: '#666' }}>Synchronizing cloud data records...</p>}
 
-      {/* Added SortBy component with necessary props for sorting functionality */}
       <SortBy 
         sortBy={sortBy} 
         sortDirection={sortDirection} 
@@ -227,14 +227,12 @@ function TodosPage({ token }) {
         onSortDirectionChange={setSortDirection} 
       />
 
-      {/* Added FilterInput component with props for managing filter term state */}
       <FilterInput 
         filterTerm={filterTerm} 
         onFilterChange={handleFilterChange} 
       />
 
       <TodoForm onAddTodo={addTodo} />
-      {/* Passed dataVersion as a prop to TodoList to trigger re-memoization when it changes */}
       <TodoList 
         todoList={todoList} 
         dataVersion={dataVersion}

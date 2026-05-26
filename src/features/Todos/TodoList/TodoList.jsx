@@ -3,9 +3,9 @@ import TodoItem from './TodoItem';
 
 function TodoList({ todoList, dataVersion, onCompleteTodo, onUpdateTodo }) {
   
+  // Memoized filtered list per performance optimization requirements
   const filteredTodoList = useMemo(() => {
-    console.log(`Recalculating filtered todos (v${dataVersion})`);
-    
+  
     return {
       version: dataVersion,
       // Filter out completed tasks so only active todos show up
