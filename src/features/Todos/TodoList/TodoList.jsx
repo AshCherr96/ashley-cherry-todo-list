@@ -1,27 +1,29 @@
-import React from 'react';
-import TodoListItem from './TodoListItem.jsx'; 
+import React, { useMemo } from 'react'; 
+import TodoItem from './TodoItem'; 
 
-// Add onUpdateTodo to the props 
-function TodoList({ todoList, onCompleteTodo, onUpdateTodo }) {
-  const filteredTodoList = todoList.filter(todo => !todo.isCompleted);
+function TodoList({ todoList, dataVersion, onCompleteTodo, onUpdateTodo }) {
+  
+  // Memoized filtered list per performance optimization requirements
+  const filteredTodoList = useMemo(() => {
+  
+    return {
+      version: dataVersion,
+      // Filter out completed tasks so only active todos show up
+      todos: todoList.filter(todo => !todo.isCompleted)
+    };
+  }, [todoList, dataVersion]); // Triggers calculation only when data or version updates
 
   return (
-    <>
-      {filteredTodoList.length === 0 ? (
-        <p>Add todo above to get started</p>
-      ) : (
-        <ul>
-          {filteredTodoList.map((todo) => (
-            <TodoListItem 
-              key={todo.id} 
-              todo={todo} 
-              onCompleteTodo={onCompleteTodo} 
-              onUpdateTodo={onUpdateTodo} 
-            />
-          ))}
-        </ul>
-      )}
-    </>
+    <ul>
+      {filteredTodoList.todos.map((todo) => (
+        <TodoItem 
+          key={todo.id} 
+          todo={todo} 
+          onCompleteTodo={onCompleteTodo} 
+          onUpdateTodo={onUpdateTodo} 
+        />
+      ))}
+    </ul>
   );
 }
 
