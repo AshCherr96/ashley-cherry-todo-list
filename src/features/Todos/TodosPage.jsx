@@ -8,7 +8,8 @@ import FilterInput from '../../shared/FilterInput';
 // Import created reducer architecture
 import { todoReducer, initialTodoState, TODO_ACTIONS } from '../../reducers/todoReducer';
 
-function TodosPage({ token }) {
+function TodosPage() {
+  const { token } = useAuth(); // Access auth token from context for API requests
   // Single useReducer orchestrating consolidated app state
   const [state, dispatch] = useReducer(todoReducer, initialTodoState);
 
