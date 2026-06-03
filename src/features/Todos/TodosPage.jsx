@@ -1,12 +1,11 @@
-import React, { useEffect, useReducer } from 'react'; 
+import React, { useEffect, useReducer } from 'react';
+import { useAuth } from '../../contexts/AuthContext'; 
 import TodoForm from './TodoForm';
 import TodoList from './TodoList/TodoList';
 import SortBy from '../../shared/SortBy';
 import useDebounce from '../../utils/useDebounce';
 import FilterInput from '../../shared/FilterInput';
 
-// Import created reducer architecture
-import { todoReducer, initialTodoState, TODO_ACTIONS } from '../../reducers/todoReducer';
 
 function TodosPage() {
   const { token } = useAuth(); // Access auth token from context for API requests
@@ -30,7 +29,7 @@ function TodosPage() {
 
   // Fetch database records on mount or query updates
   useEffect(() => {
-    // FIXED: If no token exists, immediately turn off the loading layout so forms can display
+    // If no token exists, immediately turn off the loading layout so forms can display
     if (!token) {
       dispatch({ type: TODO_ACTIONS.FETCH_SUCCESS, payload: { todos: [] } });
       return;
