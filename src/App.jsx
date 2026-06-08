@@ -1,24 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Header from './shared/Header';
-import TodosPage from './features/Todos/TodosPage';
 import Logon from './features/Logon';
+import TodosPage from './features/Todos/TodosPage';
+import { useAuth } from "./contexts/AuthContext"; // Added context subscription
 
 function App() {
-  const [email, setEmail] = useState('');
-  const [token, setToken] = useState('');
-
-
-return (
-  <div>
-    <Header token={token} onSetEmail={setEmail} onSetToken={setToken} />
-    
-    {token ? (
-      <TodosPage token={token} />
-    ) : (
-      <Logon onSetEmail={setEmail} onSetToken={setToken} />
-    )}
-  </div>
-);
+  const { isAuthenticated } = useAuth(); 
+  return (
+    <div className="app-container">
+      <Header />
+      {isAuthenticated ? <TodosPage /> : <Logon />}
+    </div>
+  );
 }
 
 export default App;

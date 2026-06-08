@@ -1,11 +1,10 @@
-import React, { useMemo } from 'react'; 
+import React, { useMemo } from 'react';
 import TodoListItem from './TodoListItem';
 
 function TodoList({ todoList, dataVersion, onCompleteTodo, onUpdateTodo }) {
   
   // Memoized filtered list per performance optimization requirements
   const filteredTodoList = useMemo(() => {
-  
     return {
       version: dataVersion,
       // Filter out completed tasks so only active todos show up
@@ -16,11 +15,11 @@ function TodoList({ todoList, dataVersion, onCompleteTodo, onUpdateTodo }) {
   return (
     <ul>
       {filteredTodoList.todos.map((todo) => (
-        <TodoItem 
+        <TodoListItem 
           key={todo.id} 
           todo={todo} 
-          onCompleteTodo={onCompleteTodo} 
-          onUpdateTodo={onUpdateTodo} 
+          onCompleteTodo={onCompleteTodo}
+          onUpdateTodo={onUpdateTodo}
         />
       ))}
     </ul>
