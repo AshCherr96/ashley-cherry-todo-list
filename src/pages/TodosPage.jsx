@@ -1,17 +1,24 @@
 import React, { useEffect, useReducer } from 'react';
-import { useAuth } from '../../contexts/AuthContext'; 
-import { todoReducer, initialTodoState, TODO_ACTIONS } from '../../reducers/todoReducer';
-import TodoForm from './TodoForm';
-import TodoList from './TodoList/TodoList';
-import SortBy from '../../shared/SortBy';
-import useDebounce from '../../utils/useDebounce';
-import FilterInput from '../../shared/FilterInput';
+import { useSearchParams } from 'react-router'; // React Router v7 hook
+import { useAuth } from '../contexts/AuthContext'; 
+import { todoReducer, initialTodoState, TODO_ACTIONS } from '../reducers/todoReducer';
+import TodoForm from '../features/Todos/TodoForm';
+import TodoList from '../features/Todos/TodoList/TodoList';
+import SortBy from '../shared/SortBy';
+import StatusFilter from '../shared/StatusFilter'; // URL status selector dropdown
+import useDebounce from '../utils/useDebounce';
+import FilterInput from '../shared/FilterInput';
 
 
 function TodosPage() {
   const { token } = useAuth(); // Access auth token from context for API requests
+  const [searchParams] = useSearchParams(); // Hook to listen to changes in query parameters
+
   // Single useReducer orchestrating consolidated app state
   const [state, dispatch] = useReducer(todoReducer, initialTodoState);
+
+  // Extract status filter string directly from URL string parameters, defaulting to 'all'
+  const statusFilter = searchParams.get('status') || 'all';
 
   // Destructure internal parameters flatly to leave JSX markup fully operational
   const {
@@ -224,15 +231,21 @@ function TodosPage() {
         onSortDirectionChange={(newDir) => dispatch({ type: TODO_ACTIONS.SET_SORT, payload: { sortBy, sortDirection: newDir } })} 
       />
 
+      {/* Inserted URL parameter filter dropdown component */}
+      <StatusFilter />
+
       <FilterInput 
         filterTerm={filterTerm} 
         onFilterChange={handleFilterChange} 
       />
 
       <TodoForm onAddTodo={addTodo} />
+      
+      {/* Forwarded the statusFilter URL configuration value down to the list view */}
       <TodoList 
         todoList={todoList} 
         dataVersion={dataVersion}
+        statusFilter={statusFilter}
         onCompleteTodo={completeTodo} 
         onUpdateTodo={updateTodo} 
       />
