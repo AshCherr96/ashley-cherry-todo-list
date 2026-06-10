@@ -20,7 +20,7 @@ function ProfilePage() {
 
         const options = {
           method: 'GET',
-          headers: { 'X-CSREN-TOKEN': token },
+          headers: { 'X-CSRF-TOKEN': token },
           credentials: 'include',
         };
 
