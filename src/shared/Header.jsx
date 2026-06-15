@@ -1,9 +1,10 @@
 import React from "react";
 import { useAuth } from "../contexts/AuthContext";
+import Navigation from './Navigation';
+import Logoff from '../features/Logoff'; 
 
 function Header() {
-  // Read auth values directly from context instead of props!
-  const { isAuthenticated, logout, email } = useAuth();
+  const { isAuthenticated, email } = useAuth();
 
   return (
     <header style={{ 
@@ -15,13 +16,14 @@ function Header() {
     }}>
       <h1>Todo List</h1>
       
-      {/* If the user is logged in, show their email and the Log Out button directly */}
+      {/* 1. Integrated the Navigation menu between the title and auth actions */}
+      <Navigation />
+      
+      {/* 2. Simplified the auth display to use the managed Logoff component */}
       {isAuthenticated && (
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <span>Welcome, <strong>{email}</strong></span>
-          <button onClick={logout} style={{ cursor: 'pointer', padding: '0.25rem 0.5rem' }}>
-            Log Out
-          </button>
+          <Logoff />
         </div>
       )}
     </header>

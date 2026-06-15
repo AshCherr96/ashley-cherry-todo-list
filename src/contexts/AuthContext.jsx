@@ -5,7 +5,6 @@ const AuthContext = createContext();
 export function useAuth() {
   const context = useContext(AuthContext);
   
-
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
@@ -64,6 +63,8 @@ export function AuthProvider({ children }) {
       // Local authentication values are ALWAYS scrubbed even if the network route drops
       setEmail('');
       setToken('');
+      
+      return { success: true };
     }
   };
 

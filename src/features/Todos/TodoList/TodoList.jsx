@@ -1,23 +1,56 @@
-import React, { useMemo } from 'react';
-import TodoListItem from './TodoListItem';
+import { useMemo } from 'react';
+import TodoListItem from './TodoListItem.jsx';
 
-function TodoList({ todoList, dataVersion, onCompleteTodo, onUpdateTodo }) {
-  
-  // Memoized filtered list per performance optimization requirements
+function TodoList({
+  todoList = [],
+  onCompleteTodo,
+  onUpdateTodo,
+  dataVersion,
+  statusFilter = 'all', // Added prop parameter with safe default fallback
+}) {
   const filteredTodoList = useMemo(() => {
+
+    let filteredTodos;
+    switch (statusFilter) {
+      case 'completed':
+        filteredTodos = todoList.filter((todo) => todo.isCompleted);
+        break;
+      case 'active':
+        filteredTodos = todoList.filter((todo) => !todo.isCompleted);
+        break;
+      case 'all':
+      default:
+        filteredTodos = todoList;
+        break;
+    }
+
     return {
       version: dataVersion,
-      // Filter out completed tasks so only active todos show up
-      todos: todoList.filter(todo => !todo.isCompleted)
+      todos: filteredTodos,
     };
-  }, [todoList, dataVersion]); // Triggers calculation only when data or version updates
+  }, [todoList, dataVersion, statusFilter]);
 
-  return (
+  // Context-aware message when no tasks match the filter criteria
+  const getEmptyMessage = () => {
+    switch (statusFilter) {
+      case 'completed':
+        return 'No completed todos yet. Complete some tasks to see them here.';
+      case 'active':
+        return 'No active todos. Add a todo above to get started.';
+      case 'all':
+      default:
+        return 'Add todo above to get started.';
+    }
+  };
+
+  return filteredTodoList.todos.length === 0 ? (
+    <p>{getEmptyMessage()}</p>
+  ) : (
     <ul>
       {filteredTodoList.todos.map((todo) => (
-        <TodoListItem 
-          key={todo.id} 
-          todo={todo} 
+        <TodoListItem
+          key={todo.id}
+          todo={todo}
           onCompleteTodo={onCompleteTodo}
           onUpdateTodo={onUpdateTodo}
         />
