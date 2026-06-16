@@ -1,15 +1,16 @@
 import { useMemo } from 'react';
 import TodoListItem from './TodoListItem.jsx';
+// Import your master container style module object
+import styles from './TodoList.module.css';
 
 function TodoList({
   todoList = [],
   onCompleteTodo,
   onUpdateTodo,
   dataVersion,
-  statusFilter = 'all', // Added prop parameter with safe default fallback
+  statusFilter = 'all',
 }) {
   const filteredTodoList = useMemo(() => {
-
     let filteredTodos;
     switch (statusFilter) {
       case 'completed':
@@ -36,17 +37,25 @@ function TodoList({
       case 'completed':
         return 'No completed todos yet. Complete some tasks to see them here.';
       case 'active':
-        return 'No active todos. Add a todo above to get started.';
+        return 'No active todos. Add a todo above to get started!';
       case 'all':
       default:
-        return 'Add todo above to get started.';
+        return 'Your task list is empty. Add a todo above to get started!';
     }
   };
 
-  return filteredTodoList.todos.length === 0 ? (
-    <p>{getEmptyMessage()}</p>
-  ) : (
-    <ul>
+  // Styled Empty State Viewport Handler using the module styles
+  if (filteredTodoList.todos.length === 0) {
+    return (
+      <div className={styles.emptyState}>
+        <p>{getEmptyMessage()}</p>
+      </div>
+    );
+  }
+
+  return (
+    // Applied clean scannable list layout styles
+    <ul className={styles.list}>
       {filteredTodoList.todos.map((todo) => (
         <TodoListItem
           key={todo.id}
