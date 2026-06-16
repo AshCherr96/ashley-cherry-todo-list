@@ -52,7 +52,6 @@ export function todoReducer(state, action) {
       return {
         ...state,
         isTodoListLoading: false,
-        // Fallback to general message if payload shape varies
         error: !action.payload.isFilterError ? (action.payload.message || action.payload) : state.error,
         filterError: action.payload.isFilterError ? (action.payload.message || action.payload) : state.filterError,
       };
@@ -81,7 +80,7 @@ export function todoReducer(state, action) {
       return {
         ...state,
         todoList: state.todoList.map((todo) =>
-          todo.id === action.payload.id ? { ...todo, isCompleted: true } : todo
+          todo.id === action.payload.id ? { ...todo, isCompleted: !todo.isCompleted } : todo
         ),
       };
     case TODO_ACTIONS.COMPLETE_TODO_SUCCESS:
@@ -129,10 +128,15 @@ export function todoReducer(state, action) {
         ...state,
         filterTerm: action.payload.filterTerm,
       };
+
+    // 🌟 SAFELY FIXED TO PREVENT BLANK SCREEN CRASHES
     case TODO_ACTIONS.CLEAR_ERROR:
-      return action.payload.isFilterError
-        ? { ...state, filterError: '' }
-        : { ...state, error: '' };
+      if (action.payload?.isFilterError) {
+        return { ...state, filterError: '' };
+      }
+      // If no payload or isFilterError is false, clear everything cleanly
+      return { ...state, error: '', filterError: '' };
+
     case TODO_ACTIONS.RESET_FILTERS:
       return {
         ...state,

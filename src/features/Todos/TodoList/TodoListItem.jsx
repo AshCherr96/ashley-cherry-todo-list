@@ -29,8 +29,8 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo, onDeleteTodo }) {
 
     // 2. SANITIZATION WITH DOMPURIFY
     const sanitizedTitle = DOMPurify.sanitize(workingTitle.trim(), {
-      ALLOWED_TAGS: [], // Remove all HTML tags completely
-      ALLOWED_ATTR: []  // Remove all attributes completely
+      ALLOWED_TAGS: [], 
+      ALLOWED_ATTR: []  
     });
 
     // 3. SECURE ERROR MESSAGING
@@ -39,8 +39,15 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo, onDeleteTodo }) {
       return;
     }
 
-    const finalTitle = finishEdit();
-    onUpdateTodo({ ...todo, title: sanitizedTitle });
+    // 4. CLEAN DISPATCH & STATE COLLAPSE
+    // Close editing mode locally first to avoid infinite state cycles
+    finishEdit(); 
+    
+    // Pass the fully intact task down, merging the safe title string
+    onUpdateTodo({ 
+      ...todo, 
+      title: sanitizedTitle 
+    });
   };
 
   const handleCancel = () => {
@@ -62,7 +69,7 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo, onDeleteTodo }) {
                   updateTitle(e.target.value);
                   if (error) setError('');
                 }}
-                maxLength={120} // 4. MAXIMUM LENGTH LIMIT
+                maxLength={120}
               />
               {error && <p className={styles.errorMessage} style={{ color: 'var(--error, #ef4444)', fontSize: '0.825rem', marginTop: '0.25rem' }}>{error}</p>}
             </div>

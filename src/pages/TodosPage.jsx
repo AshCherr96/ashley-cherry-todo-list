@@ -9,7 +9,6 @@ import StatusFilter from '../shared/StatusFilter'; // URL status selector dropdo
 import useDebounce from '../utils/useDebounce';
 import FilterInput from '../shared/FilterInput';
 
-
 function TodosPage() {
   const { token } = useAuth(); // Access auth token from context for API requests
   const [searchParams] = useSearchParams(); // Hook to listen to changes in query parameters
@@ -124,7 +123,7 @@ function TodosPage() {
     }
   };
 
-  // OPTIMISTIC TOGGLE ACTION
+  // OPTIMISTIC TOGGLE ACTION (Corrected to PUT and dynamic status values)
   const completeTodo = async (id) => {
     const originalTodo = todoList.find((todo) => todo.id === id);
     if (!originalTodo) return;
@@ -133,14 +132,15 @@ function TodosPage() {
 
     try {
       const response = await fetch(`/api/tasks/${id}`, {
-        method: 'PATCH',
+        method: 'PUT', // 👈 Changed from PATCH to PUT
         headers: {
           'Content-Type': 'application/json',
           'X-CSRF-TOKEN': token,
         },
         credentials: 'include',
         body: JSON.stringify({ 
-          isCompleted: true,
+          title: originalTodo.title,
+          isCompleted: !originalTodo.isCompleted, // 👈 Correctly toggles status cleanly
           createdAt: originalTodo.createdAt 
         }),
       });
@@ -155,7 +155,7 @@ function TodosPage() {
     }
   };
 
-  // OPTIMISTIC TITLE EDIT ACTION
+  // OPTIMISTIC TITLE EDIT ACTION (Corrected to PUT)
   const updateTodo = async (editedTodo) => {
     const originalTodo = todoList.find((todo) => todo.id === editedTodo.id);
     if (!originalTodo) return;
@@ -164,7 +164,7 @@ function TodosPage() {
 
     try {
       const response = await fetch(`/api/tasks/${editedTodo.id}`, {
-        method: 'PATCH',
+        method: 'PUT', // 👈 Changed from PATCH to PUT
         headers: {
           'Content-Type': 'application/json',
           'X-CSRF-TOKEN': token,
@@ -193,11 +193,11 @@ function TodosPage() {
         <div style={{ backgroundColor: '#ffdddd', padding: '0.5rem', marginBottom: '1rem', borderLeft: '5px solid red' }}>
           <p style={{ display: 'inline-block', margin: 0, color: 'red' }}>{error}</p>
           <button 
-            onClick={() => dispatch({ type: TODO_ACTIONS.CLEAR_ERROR, payload: { isFilterError: false } })} 
-            style={{ float: 'right', cursor: 'pointer' }}
-          >
-            Clear Error
-          </button>
+  onClick={() => dispatch({ type: TODO_ACTIONS.CLEAR_ERROR })} // Wipes state.error out completely
+  style={{ float: 'right', cursor: 'pointer' }}
+>
+  Clear Error
+</button>
           <div style={{ clear: 'both' }}></div>
         </div>
       )}
