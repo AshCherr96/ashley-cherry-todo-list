@@ -21,33 +21,31 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo, onDeleteTodo }) {
     if (!isEditing) return;
     setError('');
 
-    // 1. INPUT VALIDATION RUNS FIRST
+    // 1. INPUT VALIDATION
     if (!isValidTodoTitle(workingTitle)) {
       setError('Task title cannot be empty.');
       return;
     }
 
-    // 2. SANITIZATION WITH DOMPURIFY
+    // 2. SANITIZATION
     const sanitizedTitle = DOMPurify.sanitize(workingTitle.trim(), {
-      ALLOWED_TAGS: [], 
-      ALLOWED_ATTR: []  
+      ALLOWED_TAGS: [],
+      ALLOWED_ATTR: []
     });
 
-    // 3. SECURE ERROR MESSAGING
     if (!sanitizedTitle) {
       setError('Invalid input characters detected.');
       return;
     }
 
-    // 4. CLEAN DISPATCH & STATE COLLAPSE
-    // Close editing mode locally first to avoid infinite state cycles
-    finishEdit(); 
-    
-    // Pass the fully intact task down, merging the safe title string
+    // 3. EXECUTE UPDATE & CLOSE EDITOR
+    // The update call is now inside this scope to trigger the network request
     onUpdateTodo({ 
       ...todo, 
       title: sanitizedTitle 
     });
+    
+    finishEdit(); 
   };
 
   const handleCancel = () => {
