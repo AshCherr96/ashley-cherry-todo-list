@@ -2,6 +2,9 @@
 
 A modern, highly optimized workflow manager built with React. This application transforms a standard task tracker into a robust, portfolio-worthy project featuring client-side sanitization, strict form validations, dynamic theme design tokens, and responsive layouts designed for any device size.
 
+## Live Demo:
+This is currently not a deployed live site.
+
 ## 💻 How to View the Project (Local Preview)
 
 Since this application is optimized for local exploration, you can download and spin up the complete interactive development server on your machine in under two minutes:
