@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from 'react-router'; // v7 Import
+import { BrowserRouter, Routes, Route } from 'react-router-dom'; // v7 Import
 import './index.css';
 import App from './App.jsx';
 import { AuthProvider } from './contexts/AuthContext';
