@@ -1,1 +1,35 @@
+:root {
+  --primary: #4f46e5;       /* Modern Indigo for primary actions */
+  --primary-hover: #4338ca;
+  --secondary: #06b6d4;     /* Vibrant cyan for accents */
+  --background: #f8fafc;    /* Clean light gray background */
+  --surface: #ffffff;       /* Card background */
+  --text-main: #0f172a;     /* High contrast deep slate */
+  --text-muted: #64748b;    /* Accessible gray for helper text */
+  --border: #e2e8f0;
+  --error: #ef4444;         /* Bright red for error states */
+  --error-bg: #fef2f2;
+  --success: #10b981;
+  --radius: 12px;
+  --transition: all 0.2s ease-in-out;
+}
 
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--background);
+  color: var(--text-main);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Ensure focus states are distinct for accessibility compliance */
+*:focus-visible {
+  outline: 3px solid var(--secondary);
+  outline-offset: 2px;
+}

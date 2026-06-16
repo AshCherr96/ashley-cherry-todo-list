@@ -1,0 +1,67 @@
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background: var(--surface); /* Keeps your card row clean and white */
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: var(--transition);
+}
+
+.item:hover {
+  border-color: var(--primary); /* Pops your primary color on hover state */
+  transform: translateY(-1px);
+}
+
+.todoContent {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+/* Custom styled accessible checkbox configuration */
+.checkbox {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+.todoText {
+  font-size: 1rem;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.completedText {
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn {
+  min-height: 44px; /* Strict verification guideline alignment */
+  padding: 0 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.deleteBtn {
+  color: var(--error);
+}
+
+.deleteBtn:hover {
+  background: var(--error-bg);
+  border-color: var(--error);
+}
