@@ -22,7 +22,7 @@
 
   /* Accessibility & sizing */
   --focus-ring: 3px;
-  --touch-min: 44px; /* Recommended minimum touch target */
+  --touch-min: 44px; 
 
   /* Breakpoints */
   --bp-sm: 480px;
@@ -81,7 +81,7 @@ p, li, label { font-size: 1rem; }
 .form-group label { color: var(--text-main); font-weight: 600; }
 .error-message { color: var(--error); font-size: 0.875rem; margin-top: 0.35rem; }
 
-/* Utility: visually pleasing separators */
+/* Utility */
 .divider { height: 1px; background: var(--border); margin: 1rem 0; border-radius: 2px; }
 
 /* Prevent horizontal overflow and improve touch targets */
