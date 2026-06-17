@@ -15,6 +15,11 @@ export const TODO_ACTIONS = {
   UPDATE_TODO_SUCCESS: 'UPDATE_TODO_SUCCESS',
   UPDATE_TODO_ERROR: 'UPDATE_TODO_ERROR',
 
+  // 🌟 NEW DELETE ACTION TYPE KEYS MAPPED SECURELY BELOW
+  DELETE_TODO_START: 'DELETE_TODO_START',
+  DELETE_TODO_SUCCESS: 'DELETE_TODO_SUCCESS',
+  DELETE_TODO_ERROR: 'DELETE_TODO_ERROR',
+
   SET_SORT: 'SET_SORT',
   SET_FILTER: 'SET_FILTER',
   CLEAR_ERROR: 'CLEAR_ERROR',
@@ -52,7 +57,6 @@ export function todoReducer(state, action) {
       return {
         ...state,
         isTodoListLoading: false,
-        // Fallback to general message if payload shape varies
         error: !action.payload.isFilterError ? (action.payload.message || action.payload) : state.error,
         filterError: action.payload.isFilterError ? (action.payload.message || action.payload) : state.filterError,
       };
@@ -81,7 +85,7 @@ export function todoReducer(state, action) {
       return {
         ...state,
         todoList: state.todoList.map((todo) =>
-          todo.id === action.payload.id ? { ...todo, isCompleted: true } : todo
+          todo.id === action.payload.id ? { ...todo, isCompleted: !todo.isCompleted } : todo
         ),
       };
     case TODO_ACTIONS.COMPLETE_TODO_SUCCESS:
@@ -119,6 +123,27 @@ export function todoReducer(state, action) {
         ),
       };
 
+    // 🌟 NEW OPTIMISTIC DELETE IMPLEMENTATION BLOCKS
+    case TODO_ACTIONS.DELETE_TODO_START:
+      return {
+        ...state,
+        // Immediately drop the item from local list tracking for instant UI confirmation
+        todoList: state.todoList.filter((todo) => todo.id !== action.payload.id),
+      };
+    case TODO_ACTIONS.DELETE_TODO_SUCCESS:
+      return {
+        ...state,
+        // Increment the cache key rendering version safely
+        dataVersion: state.dataVersion + 1,
+      };
+    case TODO_ACTIONS.DELETE_TODO_ERROR:
+      return {
+        ...state,
+        error: action.payload.message,
+        // Gracefully restore the entire original object item if the cloud sync fails
+        todoList: [action.payload.originalTodo, ...state.todoList],
+      };
+
     case TODO_ACTIONS.SET_SORT:
       return {
         ...state,
@@ -129,10 +154,13 @@ export function todoReducer(state, action) {
         ...state,
         filterTerm: action.payload.filterTerm,
       };
+
     case TODO_ACTIONS.CLEAR_ERROR:
-      return action.payload.isFilterError
-        ? { ...state, filterError: '' }
-        : { ...state, error: '' };
+      if (action.payload?.isFilterError) {
+        return { ...state, filterError: '' };
+      }
+      return { ...state, error: '', filterError: '' };
+
     case TODO_ACTIONS.RESET_FILTERS:
       return {
         ...state,

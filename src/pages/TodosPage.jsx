@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
-import { useSearchParams } from 'react-router'; // React Router v7 hook
+import { useSearchParams } from 'react-router-dom'; // React Router v7 hook
 import { useAuth } from '../contexts/AuthContext'; 
 import { todoReducer, initialTodoState, TODO_ACTIONS } from '../reducers/todoReducer';
 import TodoForm from '../features/Todos/TodoForm';
@@ -8,7 +8,6 @@ import SortBy from '../shared/SortBy';
 import StatusFilter from '../shared/StatusFilter'; // URL status selector dropdown
 import useDebounce from '../utils/useDebounce';
 import FilterInput from '../shared/FilterInput';
-
 
 function TodosPage() {
   const { token } = useAuth(); // Access auth token from context for API requests
@@ -124,7 +123,7 @@ function TodosPage() {
     }
   };
 
-  // OPTIMISTIC TOGGLE ACTION
+  // OPTIMISTIC TOGGLE ACTION 
   const completeTodo = async (id) => {
     const originalTodo = todoList.find((todo) => todo.id === id);
     if (!originalTodo) return;
@@ -133,14 +132,15 @@ function TodosPage() {
 
     try {
       const response = await fetch(`/api/tasks/${id}`, {
-        method: 'PATCH',
+        method: 'PUT', 
         headers: {
           'Content-Type': 'application/json',
           'X-CSRF-TOKEN': token,
         },
         credentials: 'include',
         body: JSON.stringify({ 
-          isCompleted: true,
+          title: originalTodo.title,
+          isCompleted: !originalTodo.isCompleted, 
           createdAt: originalTodo.createdAt 
         }),
       });
@@ -164,7 +164,7 @@ function TodosPage() {
 
     try {
       const response = await fetch(`/api/tasks/${editedTodo.id}`, {
-        method: 'PATCH',
+        method: 'PUT', 
         headers: {
           'Content-Type': 'application/json',
           'X-CSRF-TOKEN': token,
@@ -187,13 +187,41 @@ function TodosPage() {
     }
   };
 
+  // 🌟 NEW OPTIMISTIC DELETE ACTION
+  const deleteTodo = async (id) => {
+    const originalTodo = todoList.find((todo) => todo.id === id);
+    if (!originalTodo) return;
+
+    // Use string type directly to avoid potential object mapping discrepancies
+    dispatch({ type: 'DELETE_TODO_START', payload: { id } });
+
+    try {
+      const response = await fetch(`/api/tasks/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': token,
+        },
+        credentials: 'include',
+      });
+
+      if (!response.ok) throw new Error('Could not delete task from server.');
+      dispatch({ type: 'DELETE_TODO_SUCCESS' });
+    } catch (err) {
+      dispatch({
+        type: 'DELETE_TODO_ERROR',
+        payload: { id, originalTodo, message: `Delete Failed: ${err.message}` }
+      });
+    }
+  };
+
   return (
     <main style={{ maxWidth: '600px', margin: '0 auto', padding: '1rem' }}>
       {error && (
         <div style={{ backgroundColor: '#ffdddd', padding: '0.5rem', marginBottom: '1rem', borderLeft: '5px solid red' }}>
           <p style={{ display: 'inline-block', margin: 0, color: 'red' }}>{error}</p>
           <button 
-            onClick={() => dispatch({ type: TODO_ACTIONS.CLEAR_ERROR, payload: { isFilterError: false } })} 
+            onClick={() => dispatch({ type: TODO_ACTIONS.CLEAR_ERROR })} 
             style={{ float: 'right', cursor: 'pointer' }}
           >
             Clear Error
@@ -231,7 +259,6 @@ function TodosPage() {
         onSortDirectionChange={(newDir) => dispatch({ type: TODO_ACTIONS.SET_SORT, payload: { sortBy, sortDirection: newDir } })} 
       />
 
-      {/* Inserted URL parameter filter dropdown component */}
       <StatusFilter />
 
       <FilterInput 
@@ -241,13 +268,14 @@ function TodosPage() {
 
       <TodoForm onAddTodo={addTodo} />
       
-      {/* Forwarded the statusFilter URL configuration value down to the list view */}
+      {/* 🌟 PROPS FORWARDED TO LIST VIEW LINK UNBLOCKED BELOW */}
       <TodoList 
         todoList={todoList} 
         dataVersion={dataVersion}
         statusFilter={statusFilter}
         onCompleteTodo={completeTodo} 
         onUpdateTodo={updateTodo} 
+        onDeleteTodo={deleteTodo} 
       />
     </main>
   );

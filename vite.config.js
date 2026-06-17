@@ -11,7 +11,8 @@ export default ({ mode }) => {
       port: 3001,
       proxy: {
         '/api': {
-          target: env.VITE_TARGET,
+          // Fall back directly to the CTD server if the env variable isn't read
+          target: env.VITE_TARGET || 'https://ctd-learns-node-l42tx.ondigitalocean.app',
           secure: false,
           changeOrigin: true,
           configure: (proxy) => {

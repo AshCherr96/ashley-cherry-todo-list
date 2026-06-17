@@ -21,26 +21,31 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo, onDeleteTodo }) {
     if (!isEditing) return;
     setError('');
 
-    // 1. INPUT VALIDATION RUNS FIRST
+    // 1. INPUT VALIDATION
     if (!isValidTodoTitle(workingTitle)) {
       setError('Task title cannot be empty.');
       return;
     }
 
-    // 2. SANITIZATION WITH DOMPURIFY
+    // 2. SANITIZATION
     const sanitizedTitle = DOMPurify.sanitize(workingTitle.trim(), {
-      ALLOWED_TAGS: [], // Remove all HTML tags completely
-      ALLOWED_ATTR: []  // Remove all attributes completely
+      ALLOWED_TAGS: [],
+      ALLOWED_ATTR: []
     });
 
-    // 3. SECURE ERROR MESSAGING
     if (!sanitizedTitle) {
       setError('Invalid input characters detected.');
       return;
     }
 
-    const finalTitle = finishEdit();
-    onUpdateTodo({ ...todo, title: sanitizedTitle });
+    // 3. EXECUTE UPDATE & CLOSE EDITOR
+    // The update call is now inside this scope to trigger the network request
+    onUpdateTodo({ 
+      ...todo, 
+      title: sanitizedTitle 
+    });
+    
+    finishEdit(); 
   };
 
   const handleCancel = () => {
@@ -62,7 +67,7 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo, onDeleteTodo }) {
                   updateTitle(e.target.value);
                   if (error) setError('');
                 }}
-                maxLength={120} // 4. MAXIMUM LENGTH LIMIT
+                maxLength={120}
               />
               {error && <p className={styles.errorMessage} style={{ color: 'var(--error, #ef4444)', fontSize: '0.825rem', marginTop: '0.25rem' }}>{error}</p>}
             </div>

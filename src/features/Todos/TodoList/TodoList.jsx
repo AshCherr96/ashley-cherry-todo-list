@@ -7,6 +7,7 @@ function TodoList({
   todoList = [],
   onCompleteTodo,
   onUpdateTodo,
+  onDeleteTodo, // 🌟 1. ACCEPT THE NEW PROP HANDLER HERE
   dataVersion,
   statusFilter = 'all',
 }) {
@@ -62,6 +63,7 @@ function TodoList({
           todo={todo}
           onCompleteTodo={onCompleteTodo}
           onUpdateTodo={onUpdateTodo}
+          onDeleteTodo={onDeleteTodo} // 🌟 2. FORWARD IT DIRECTLY TO ROW ITEMS HERE
         />
       ))}
     </ul>
