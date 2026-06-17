@@ -59,18 +59,18 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo, onDeleteTodo }) {
         {isEditing ? (
           <div className={styles.editLayout}>
             <div className={styles.inputWrapper}>
-              <TextInputWithLabel 
-                id={`edit-${todo.id}`}
-                label="Edit Todo"
-                value={workingTitle} 
-                onChange={(e) => {
-                  updateTitle(e.target.value);
-                  if (error) setError('');
-                }}
-                maxLength={120}
-              />
-              {error && <p className={styles.errorMessage} style={{ color: 'var(--error, #ef4444)', fontSize: '0.825rem', marginTop: '0.25rem' }}>{error}</p>}
-            </div>
+  <TextInputWithLabel 
+    id={`edit-${todo.id}`}
+    label="Edit Todo"
+    value={workingTitle} 
+    onChange={(e) => {
+      updateTitle(e.target.value);
+      if (error) setError('');
+    }}
+    error={error} 
+    maxLength={120}
+  />
+</div>
             <div className={styles.actions}>
               <button 
                 type="submit" 
