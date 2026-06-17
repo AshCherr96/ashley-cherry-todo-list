@@ -6,39 +6,56 @@ import styles from './TodoForm.module.css';
 
 function TodoForm({ onAddTodo }) {
   const [workingTodoTitle, setWorkingTodoTitle] = useState('');
+  const [error, setError] = useState('');
   const inputRef = useRef();
 
   const handleAddTodo = (event) => {
     event.preventDefault();
-    
-    // Run client-side validation FIRST before any sanitization step
-    if (!isValidTodoTitle(workingTodoTitle)) return;
+    const trimmedTitle = workingTodoTitle.trim();
 
-    // Sanitize user input using DOMPurify to strip out malicious XSS scripts/HTML tags
-    const sanitizedTitle = DOMPurify.sanitize(workingTodoTitle.trim(), {
-      ALLOWED_TAGS: [], // Remove all HTML tags completely
-      ALLOWED_ATTR: []  // Remove all attributes completely
+    if (!isValidTodoTitle(trimmedTitle)) {
+      setError('Please type a todo before adding.');
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+      return;
+    }
+
+    const sanitizedTitle = DOMPurify.sanitize(trimmedTitle, {
+      ALLOWED_TAGS: [],
+      ALLOWED_ATTR: []
     });
 
-    // Forward the sanitized string if it contains valid characters
     if (sanitizedTitle.length > 0) {
       onAddTodo(sanitizedTitle);
-      setWorkingTodoTitle(''); 
+      setWorkingTodoTitle('');
+      setError('');
       if (inputRef.current) {
         inputRef.current.focus();
       }
     }
   };
 
+  const handleBlur = () => {
+    if (!isValidTodoTitle(workingTodoTitle.trim())) {
+      setError('Please type a todo before adding.');
+    }
+  };
+
   return (
-    <form onSubmit={handleAddTodo} className={styles.form}>
+    <form onSubmit={handleAddTodo} className={styles.form} noValidate>
       <div className={styles.inputGroup}>
         <TextInputWithLabel 
           id="todoTitle" 
           label="Todo"
           inputRef={inputRef}
           value={workingTodoTitle}
-          onChange={(event) => setWorkingTodoTitle(event.target.value)}
+          onChange={(event) => {
+            setWorkingTodoTitle(event.target.value);
+            if (error) setError('');
+          }}
+          onBlur={handleBlur}
+          error={error}
           className={styles.input}
           maxLength={120} // 3. Maximum length limit constraint to prevent layout distortion
           placeholder="What needs to be done?"

@@ -132,7 +132,7 @@ function TodosPage() {
 
     try {
       const response = await fetch(`/api/tasks/${id}`, {
-        method: 'PUT', 
+        method: 'PATCH', 
         headers: {
           'Content-Type': 'application/json',
           'X-CSRF-TOKEN': token,
@@ -140,12 +140,14 @@ function TodosPage() {
         credentials: 'include',
         body: JSON.stringify({ 
           title: originalTodo.title,
-          isCompleted: !originalTodo.isCompleted, 
-          createdAt: originalTodo.createdAt 
+          isCompleted: !originalTodo.isCompleted,
         }),
       });
 
-      if (!response.ok) throw new Error('Failed to update task status.');
+      if (!response.ok) {
+        const errorBody = await response.text().catch(() => '');
+        throw new Error(errorBody || 'Failed to update task status.');
+      }
       dispatch({ type: TODO_ACTIONS.COMPLETE_TODO_SUCCESS });
     } catch (err) {
       dispatch({
@@ -164,20 +166,22 @@ function TodosPage() {
 
     try {
       const response = await fetch(`/api/tasks/${editedTodo.id}`, {
-        method: 'PUT', 
+        method: 'PATCH', 
         headers: {
           'Content-Type': 'application/json',
           'X-CSRF-TOKEN': token,
         },
         credentials: 'include',
         body: JSON.stringify({ 
-          title: editedTodo.title, 
+          title: editedTodo.title,
           isCompleted: editedTodo.isCompleted,
-          createdAt: originalTodo.createdAt
         }),
       });
 
-      if (!response.ok) throw new Error('Could not modify task details.');
+      if (!response.ok) {
+        const errorBody = await response.text().catch(() => '');
+        throw new Error(errorBody || 'Could not modify task details.');
+      }
       dispatch({ type: TODO_ACTIONS.UPDATE_TODO_SUCCESS });
     } catch (err) {
       dispatch({

@@ -46,7 +46,7 @@
 }
 
 .btn {
-  min-height: 44px; /* Strict verification guideline alignment */
+  min-height: var(--touch-min);
   padding: 0 1rem;
   font-size: 0.875rem;
   font-weight: 500;
