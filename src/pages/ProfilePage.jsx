@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 
 function ProfilePage() {
-  const { email, token } = useAuth();
+  const { firstName, lastName, email, token } = useAuth();
 
   // Component state management variables
   const [todoStats, setTodoStats] = useState({ total: 0, completed: 0, active: 0 });
@@ -67,8 +67,8 @@ function ProfilePage() {
       {/* User Account Information Section */}
       <section style={{ marginBottom: '2rem', padding: '1rem', border: '1px solid #ccc', borderRadius: '4px' }}>
         <h3>Account Details</h3>
-        {/* Render the actual 'email' variable directly instead of looking for user.name */}
-        <p><strong>Email Address:</strong> {email || 'Code The Dream Student'}</p>
+        {/* Display the user's first and last name, or email as fallback */}
+        <p><strong>Name:</strong> {firstName && lastName ? `${firstName} ${lastName}` : email}</p>
         <p><strong>Status:</strong> Active Account</p>
       </section>
 

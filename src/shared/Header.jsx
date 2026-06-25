@@ -4,7 +4,7 @@ import Navigation from './Navigation';
 import Logoff from '../features/Logoff'; 
 
 function Header() {
-  const { isAuthenticated, firstName, lastName } = useAuth();
+  const { isAuthenticated, firstName, lastName, email } = useAuth();
 
   return (
     <header style={{ 
@@ -22,7 +22,7 @@ function Header() {
       {/* 2. Simplified the auth display to use the managed Logoff component */}
       {isAuthenticated && (
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <span>Welcome, <strong>{firstName} {lastName}</strong></span>
+          <span>Welcome, <strong>{firstName && lastName ? `${firstName} ${lastName}` : email}</strong></span>
           <Logoff />
         </div>
       )}
