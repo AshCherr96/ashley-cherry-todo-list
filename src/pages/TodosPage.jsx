@@ -276,6 +276,8 @@ function TodosPage() {
       <TodoList 
         todoList={todoList} 
         dataVersion={dataVersion}
+        sortBy={sortBy}
+        sortDirection={sortDirection}
         statusFilter={statusFilter}
         onCompleteTodo={completeTodo} 
         onUpdateTodo={updateTodo} 

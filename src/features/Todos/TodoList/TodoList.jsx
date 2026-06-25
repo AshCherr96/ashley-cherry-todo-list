@@ -9,9 +9,29 @@ function TodoList({
   onUpdateTodo,
   onDeleteTodo, // 🌟 1. ACCEPT THE NEW PROP HANDLER HERE
   dataVersion,
+  sortBy = 'creationDate',
+  sortDirection = 'desc',
   statusFilter = 'all',
 }) {
   const filteredTodoList = useMemo(() => {
+    const getSortValue = (todo) => {
+      if (sortBy === 'title') {
+        return (todo.title || '').toString().toLowerCase();
+      }
+
+      const creationValue = todo.creationDate ?? todo.createdAt ?? todo.created_at ?? todo.created;
+      if (!creationValue) {
+        return 0;
+      }
+
+      if (typeof creationValue === 'number') {
+        return creationValue;
+      }
+
+      const parsed = Date.parse(creationValue);
+      return Number.isNaN(parsed) ? 0 : parsed;
+    };
+
     let filteredTodos;
     switch (statusFilter) {
       case 'completed':
@@ -26,11 +46,25 @@ function TodoList({
         break;
     }
 
+    const sortedTodos = [...filteredTodos].sort((a, b) => {
+      const aValue = getSortValue(a);
+      const bValue = getSortValue(b);
+      const direction = sortDirection === 'asc' ? 1 : -1;
+
+      if (sortBy === 'title') {
+        if (aValue < bValue) return -1 * direction;
+        if (aValue > bValue) return 1 * direction;
+        return 0;
+      }
+
+      return (aValue - bValue) * direction;
+    });
+
     return {
       version: dataVersion,
-      todos: filteredTodos,
+      todos: sortedTodos,
     };
-  }, [todoList, dataVersion, statusFilter]);
+  }, [todoList, dataVersion, sortBy, sortDirection, statusFilter]);
 
   // Context-aware message when no tasks match the filter criteria
   const getEmptyMessage = () => {
