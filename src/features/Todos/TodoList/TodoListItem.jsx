@@ -10,7 +10,6 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo, onDeleteTodo }) {
   const { 
     isEditing, 
     workingTitle, 
-    startEditing, 
     cancelEdit, 
     updateTitle, 
     finishEdit 
@@ -116,7 +115,20 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo, onDeleteTodo }) {
             <div className={styles.actions}>
               <button 
                 type="button"
-                onClick={startEditing} 
+                onClick={() => {
+                  try {
+                    const newTitle = window.prompt('Edit Todo', todo.title);
+                    if (newTitle === null) return;
+                    const sanitized = DOMPurify.sanitize(newTitle.trim(), { ALLOWED_TAGS: [], ALLOWED_ATTR: [] });
+                    if (!isValidTodoTitle(sanitized)) {
+                      alert('Task title cannot be empty.');
+                      return;
+                    }
+                    onUpdateTodo({ ...todo, title: sanitized });
+                  } catch (err) {
+                    console.error('Edit prompt failed', err);
+                  }
+                }} 
                 className={styles.btn}
               >
                 Edit
