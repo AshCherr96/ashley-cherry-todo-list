@@ -27,8 +27,10 @@ export function AuthProvider({ children }) {
       const res = await fetch('/api/users/logon', options);
       const data = await res.json();
       
-      if (res.status === 200 && data.name && data.csrfToken) {
-        setEmail(data.name);
+      if (res.status === 200 && data.csrfToken) {
+        // Prefer explicit email from the server, fallback to the submitted email or name
+        const resolvedEmail = data.email || userEmail || data.name || '';
+        setEmail(resolvedEmail);
         setToken(data.csrfToken);
         return { success: true };
       } else {
