@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import DOMPurify from 'dompurify';
 import { useEditableTitle } from '../../../hooks/useEditableTitle';
 import TextInputWithLabel from '../../../shared/TextInputWithLabel';
@@ -15,6 +15,15 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo, onDeleteTodo }) {
     updateTitle, 
     finishEdit 
   } = useEditableTitle(todo.title);
+
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (isEditing && inputRef.current) {
+      inputRef.current.focus();
+      inputRef.current.select && inputRef.current.select();
+    }
+  }, [isEditing]);
 
   const handleUpdate = (event) => {
     event.preventDefault();
@@ -63,6 +72,7 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo, onDeleteTodo }) {
     id={`edit-${todo.id}`}
     label="Edit Todo"
     value={workingTitle} 
+    inputRef={inputRef}
     onChange={(e) => {
       updateTitle(e.target.value);
       if (error) setError('');
@@ -98,11 +108,7 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo, onDeleteTodo }) {
                 className={styles.checkbox}
                 id={`check-${todo.id}`}
               />
-              <span 
-                onClick={startEditing}
-                className={`${styles.todoText} ${todo.isCompleted ? styles.completedText : ''}`}
-                style={{ cursor: 'pointer' }}
-              >
+              <span className={`${styles.todoText} ${todo.isCompleted ? styles.completedText : ''}`}>
                 {todo.title}
               </span>
             </div>
