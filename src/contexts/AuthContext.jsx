@@ -13,6 +13,8 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [email, setEmail] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [token, setToken] = useState('');
 
   const login = async (userEmail, password) => {
@@ -31,6 +33,8 @@ export function AuthProvider({ children }) {
         // Prefer explicit email from the server, fallback to the submitted email or name
         const resolvedEmail = data.email || userEmail || data.name || '';
         setEmail(resolvedEmail);
+        setFirstName(data.firstName || '');
+        setLastName(data.lastName || '');
         setToken(data.csrfToken);
         return { success: true };
       } else {
@@ -64,6 +68,8 @@ export function AuthProvider({ children }) {
     } finally {
       // Local authentication values are ALWAYS scrubbed even if the network route drops
       setEmail('');
+      setFirstName('');
+      setLastName('');
       setToken('');
       
       return { success: true };
@@ -72,6 +78,8 @@ export function AuthProvider({ children }) {
 
   const value = {
     email,
+    firstName,
+    lastName,
     token,
     isAuthenticated: !!token,
     login,
