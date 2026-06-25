@@ -5,9 +5,6 @@ export function useEditableTitle(initialTitle) {
   const [workingTitle, setWorkingTitle] = useState(initialTitle);
 
   const startEditing = (initial = undefined) => {
-    if (typeof window !== 'undefined') {
-      window.__editCalled = initial || true;
-    }
     setWorkingTitle(typeof initial === 'undefined' ? initialTitle : initial);
     setIsEditing(true);
   };
