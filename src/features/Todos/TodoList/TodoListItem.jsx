@@ -116,7 +116,7 @@ function TodoListItem({ todo, onCompleteTodo, onUpdateTodo, onDeleteTodo }) {
             <div className={styles.actions}>
               <button 
                 type="button"
-                onClick={startEditing} 
+                onClick={() => startEditing(todo.title)} 
                 className={styles.btn}
               >
                 Edit
